@@ -12,10 +12,22 @@ namespace PTI.Reliance.Windows.Test
         [Test]
         public void TestPrintJob()
         {
-            var printer = new ReliancePrinter("Reliance (Copy 1)");
-            //var printer = new ReliancePrinter("CUSTOM TL80");
+            // TODO enter the name of your printer
+            var printerName = "Reliance (Copy 1)";
+
+
+            var printer = new ReliancePrinter(printerName);
             
             var lineOfText = string.Format("Today is {0}\n", DateTime.Now.ToLongTimeString());
+
+            // There is an open task for tabs, bold, etc.            
+            var receiptContent = new TextContent();
+            receiptContent.TextBuilder.Append("\n");
+            receiptContent.TextBuilder.Append("Item       Price    Quantity\n");
+            receiptContent.TextBuilder.Append("Lettuce    $4.99       3\n");
+            receiptContent.TextBuilder.Append("\n\n");
+            receiptContent.TextBuilder.Append("Total--------------------\n");
+            receiptContent.TextBuilder.AppendFormat("${0}", 4.99 * 3);
 
             var welcomeFont = new Font("Tahoma", 22);            
             var trailerFont = new Font("Courier Mono", 12);
@@ -23,12 +35,13 @@ namespace PTI.Reliance.Windows.Test
             var content = new List<IContent>
             {
                 new ImageContent(Resources.small_lettuce_burgers),
-                new TextContent("Welcome", welcomeFont),
+                new TextContent("Welcome", welcomeFont, StringAlignment.Center),
 
-                new ImageContent(Resources.small_lettuce_burgers),
-                new ImageContent(Resources.small_lettuce_burgers),
-                new ImageContent(Resources.small_lettuce_burgers),
+                receiptContent,
+
                 new TextContent(lineOfText, trailerFont),
+                new TextContent("Ticket #007", justification: StringAlignment.Far),
+
             };
 
             var document = new Document

@@ -11,6 +11,9 @@
     /// point sizes, and weight. All text in this content uses
     /// the same style. To use multiple styles in a document's text
     /// you must create multiple instances of TextContent.
+    /// TODO list
+    /// Tab stops
+    /// Bold, Italic, etc.
     /// </summary>
     public class TextContent : IContent
     {
@@ -18,8 +21,9 @@
         /// Constructor
         /// <param name="initialText">Optional starting text</param>
         /// <param name="font">Optional font</param>
+        /// <param name="justification">Line's horizontal justification</param>
         /// </summary>
-        public TextContent(string initialText = "", Font font = null)
+        public TextContent(string initialText = "", Font font = null, StringAlignment justification = StringAlignment.Near)
         {
             TextBuilder = new StringBuilder(initialText);
 
@@ -29,6 +33,7 @@
             }
 
             CurrentFont = font;
+            Justification = justification;
         }
 
         /// <summary>
@@ -37,6 +42,12 @@
         /// E.g. Comic Sans 32 point bold
         /// </summary>
         public Font CurrentFont { get; set; }
+
+        /// <summary>
+        /// Gets or Sets the justification for this content        
+        /// Warning: Center justification will break text wrapping
+        /// </summary>        
+        public StringAlignment Justification { get; set; }     
 
         /// <summary>
         /// Mutable document text
@@ -50,8 +61,8 @@
             {
                 var drawFont = CurrentFont;
                 var text = TextBuilder.ToString();
-                return hwnd.MeasureString(text, drawFont);
-
+                var size = hwnd.MeasureString(text, drawFont);
+                return size;
             }
         }
 
@@ -61,7 +72,19 @@
             var drawFont = CurrentFont;
             var drawBrush = new SolidBrush(System.Drawing.Color.Black);
 
-            args.Graphics.DrawString(TextBuilder.ToString(), drawFont, drawBrush, point);
+            // Produce alignment descriptor - always vertically centered
+            var format = new StringFormat
+            {
+                LineAlignment = StringAlignment.Center,
+                Alignment = Justification,                
+            };
+            format.SetTabStops(0, new []{ 4.0f });
+
+            // Allignment is relative to a region
+            var textSize = MeasureSize();
+            var region = new RectangleF(point.X, point.Y, args.PageBounds.Width, textSize.Height);
+
+            args.Graphics.DrawString(TextBuilder.ToString(), drawFont, drawBrush, region, format);
         }
 
     }

@@ -1,4 +1,7 @@
-﻿namespace PTI.Reliance.Windows
+﻿using System.Drawing;
+using System.Linq;
+
+namespace PTI.Reliance.Windows
 {
     using System.Drawing.Printing;
 
@@ -42,16 +45,16 @@
             // and generate a new paper size on the fly.
             if (doc.AutoSize)
             {
+
                 // Units are in hundreths of an inch 
                 var width = (int) (Utilities.ConvertMmToInches(80) * 100);
-                var pixelHeight = doc.MeasureSize().Height;
-                var height = (int)pixelHeight * 2;
+                var height = (int) doc.MeasureSize().Height;
 
                 var newSize = new PaperSize
                 {
                     PaperName = "User Size",
                     RawKind = 256, // DMPAPER_USER
-                    Height = height,
+                    Height = height + doc.DocumentContent.Count() * 5, // HACKHACK Give a little margin
                     Width = width
                 };         
 
