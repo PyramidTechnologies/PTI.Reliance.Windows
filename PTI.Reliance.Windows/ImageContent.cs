@@ -6,7 +6,7 @@
 
     public class ImageContent : IContent, IDisposable
     {
-        bool _disposed = false;
+        bool _disposed;
 
         /// <summary>
         /// Create a new Image Content with specified image

@@ -36,9 +36,7 @@
 
         public void Print(object sender, PrintPageEventArgs e)
         {
-            // TODO
-            // Margins
-            // Spacing
+            // TODO Margins and Spacing
             var origin = new PointF(0, 0);
 
             foreach (var content in DocumentContent)

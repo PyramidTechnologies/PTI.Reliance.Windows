@@ -1,8 +1,6 @@
-﻿using System.Drawing;
-using System.Linq;
-
-namespace PTI.Reliance.Windows
+﻿namespace PTI.Reliance.Windows
 {
+    using System.Linq;
     using System.Drawing.Printing;
 
     /// <inheritdoc />

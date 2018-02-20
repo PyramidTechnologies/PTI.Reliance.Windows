@@ -11,12 +11,14 @@
     /// point sizes, and weight. All text in this content uses
     /// the same style. To use multiple styles in a document's text
     /// you must create multiple instances of TextContent.
-    /// TODO list
-    /// Tab stops
-    /// Bold, Italic, etc.
+    /// TODO Bold, Italic, etc.
     /// </summary>
     public class TextContent : IContent
     {
+
+        private float _tabOffset;
+        private float[] _tabStops;
+
         /// <summary>
         /// Constructor
         /// <param name="initialText">Optional starting text</param>
@@ -34,6 +36,8 @@
 
             CurrentFont = font;
             Justification = justification;
+            _tabOffset = 0;
+            _tabStops = new float[0];
         }
 
         /// <summary>
@@ -47,7 +51,12 @@
         /// Gets or Sets the justification for this content        
         /// Warning: Center justification will break text wrapping
         /// </summary>        
-        public StringAlignment Justification { get; set; }     
+        public StringAlignment Justification { get; set; }
+
+        /// <summary>
+        /// Gets or Sets string format flags for the text output.       
+        /// </summary>
+        public StringFormatFlags FormatFlags { get; set; }
 
         /// <summary>
         /// Mutable document text
@@ -66,6 +75,20 @@
             }
         }
 
+        /// <summary>
+        /// Sets tab stops for input string. The offset detemines the space (in page units)
+        /// from the start of a line to the first tab stop. The stops array defines
+        /// how many units of space occur between each tab, relative to the previous stop
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="stops"></param>
+        public void SetTabStops(float offset, float[] stops)
+        {
+            _tabOffset = offset;
+            _tabStops = new float[stops.Length];
+            Array.Copy(stops, _tabStops, stops.Length);
+        }
+
         /// <inheritdoc />
         public void Draw(PrintPageEventArgs args, PointF point)
         {          
@@ -76,9 +99,10 @@
             var format = new StringFormat
             {
                 LineAlignment = StringAlignment.Center,
-                Alignment = Justification,                
+                Alignment = Justification,          
+                FormatFlags = FormatFlags,
             };
-            format.SetTabStops(0, new []{ 4.0f });
+            format.SetTabStops(_tabOffset, _tabStops);
 
             // Allignment is relative to a region
             var textSize = MeasureSize();
