@@ -8,15 +8,10 @@
         /// <summary>
         /// Gets or Sets the name of the printer this instance 
         /// is associated with. If setting the name, the string
-        /// must match the OS name of the printer (case insentitive)
+        /// must match the OS name of the printer (case insensitive)
         /// </summary>
         string PrinterName { get; set; }
-
-        /// <summary>
-        /// Gets or Sets paper width in mm
-        /// </summary>
-        int PaperWidthmm { get; set; }
-
+        
         /// <summary>
         /// Prints the current document content        
         /// </summary>

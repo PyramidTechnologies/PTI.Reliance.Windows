@@ -18,6 +18,9 @@
         public bool AutoSize { get; set; }
 
         /// <inheritdoc />
+        public PageSizeMillimeters RequestedSize { get; set; }
+
+        /// <inheritdoc />
         public IEnumerable<IContent> DocumentContent { get; set; }
 
         /// <inheritdoc />

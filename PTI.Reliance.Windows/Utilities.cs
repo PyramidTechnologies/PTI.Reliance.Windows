@@ -1,4 +1,8 @@
-﻿namespace PTI.Reliance.Windows
+﻿using System.Diagnostics;
+using System.Drawing.Printing;
+using System.Linq;
+
+namespace PTI.Reliance.Windows
 {
     using System;
     using System.Collections.Generic;
@@ -42,6 +46,17 @@
         public static float ConvertInchesToMm(float inches)
         {
             return inches * 25.4f;
+        }
+
+        /// <summary>
+        /// Returns all printer page sizes on system
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<string> GetPageSizeList()
+        {
+            var doc = new PrintDocument();            
+            var paperSizes = doc.PrinterSettings.PaperSizes;
+            return (from object ps in paperSizes select ps.ToString()).ToList();
         }
     }
 }

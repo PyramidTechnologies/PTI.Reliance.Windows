@@ -21,6 +21,12 @@
         bool AutoSize { get; set; }
 
         /// <summary>
+        /// Print document into an area of this size. If <see cref="AutoSize"/>
+        /// is enabled, this field will be ignored.
+        /// </summary>
+        PageSizeMillimeters RequestedSize { get; set; }
+
+        /// <summary>
         /// Gets or Sets list of document content.
         /// Paper leaves the Reliance Printer top-first
         /// so DocumentContent[0] is printed first.

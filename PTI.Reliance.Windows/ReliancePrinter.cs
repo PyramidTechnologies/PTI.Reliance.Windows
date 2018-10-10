@@ -12,17 +12,10 @@
         public ReliancePrinter(string printerName)
         {
             PrinterName = printerName;
-            PaperWidthmm = 80;
         }
 
         /// <inheritdoc />
         public string PrinterName { get; set; }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Reliance default width is 80mm
-        /// </summary>
-        public int PaperWidthmm { get; set; }
 
         /// <inheritdoc />
         public void PrintDocument(IDocument doc)
@@ -57,6 +50,11 @@
                 };         
 
                 msDocument.DefaultPageSettings.PaperSize = newSize;
+            }
+            else if (doc.RequestedSize != null)
+            {
+                // Use the user-defined paper size
+                msDocument.DefaultPageSettings.PaperSize = doc.RequestedSize.WinPaperSize;
             }
 
 
